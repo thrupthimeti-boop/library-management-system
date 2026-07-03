@@ -1,8 +1,8 @@
 import csv
 
-print("===================================")
+print("====================================")
 print("Library Management System")
-print("===================================")
+print("====================================")
 
 while True:
     print("\nMenu")
@@ -34,7 +34,7 @@ while True:
                 reader = csv.reader(file)
 
                 print("\nLibrary Books")
-                print("-------------------------------------------")
+                print("-------------------------------------")
 
                 for row in reader:
                     print("Book ID:", row[0])
@@ -47,7 +47,7 @@ while True:
                     if len(row) == 5:
                         print("Issued To:", row[4])
 
-                    print("-------------------------------------------")
+                    print("-------------------------------------")
 
         except FileNotFoundError:
             print("No books found.")
@@ -70,16 +70,19 @@ while True:
                         if len(row) >= 4:
                             print("Status:", row[3])
 
+                        if len(row) == 5:
+                            print("Issued To:", row[4])
+
                         found = True
                         break
 
-            if not found:
-                print("Book not found.")
-             
+                if not found:
+                    print("Book not found.")
 
         except FileNotFoundError:
             print("No books found.")
-   elif choice == "4":
+
+    elif choice == "4":
         update_id = input("Enter Book ID to update: ")
         updated_rows = []
         found = False
@@ -93,26 +96,14 @@ while True:
                         new_name = input("Enter New Book Name: ")
                         new_author = input("Enter New Author Name: ")
 
-                        if len(row) >= 4:
-                            status = row[3]
-                        else:
-                            status = "Available"
+                        status = row[3] if len(row) >= 4 else "Available"
 
-                        if len(row) == 5:
-                            updated_rows.append([
-                                update_id,
-                                new_name,
-                                new_author,
-                                status,
-                                row[4]
-                            ])
-                        else:
-                            updated_rows.append([
-                                update_id,
-                                new_name,
-                                new_author,
-                                status
-                            ])
+                        updated_rows.append([
+                            update_id,
+                            new_name,
+                            new_author,
+                            status
+                        ])
 
                         found = True
                     else:
@@ -128,9 +119,8 @@ while True:
                 print("Book not found.")
 
         except FileNotFoundError:
-            print("No books found.")
-
-    elif choice == "5":
+            print("No books found.")int("No books found.")
+            elif choice == "5":
         delete_id = input("Enter Book ID to delete: ")
         updated_rows = []
         found = False
@@ -151,8 +141,8 @@ while True:
 
             if found:
                 print("Book deleted successfully!")
-            else:
-                print("Book not found.")
+                  else:
+                       print("Book not found.")
 
         except FileNotFoundError:
             print("No books found.")
@@ -170,10 +160,7 @@ while True:
 
                 for row in reader:
                     if row and row[0] == issue_id:
-                        if len(row) >= 4 and row[3] == "Issued":
-                            print("Book is already issued.")
-                            updated_rows.append(row)
-                        else:
+                        if len(row) >= 4 and row[3] == "Available":
                             updated_rows.append([
                                 row[0],
                                 row[1],
@@ -182,6 +169,9 @@ while True:
                                 student_name
                             ])
                             found = True
+                        else:
+                            print("Book is already issued.")
+                            updated_rows.append(row)
                     else:
                         updated_rows.append(row)
 
@@ -191,8 +181,43 @@ while True:
 
             if found:
                 print("Book issued successfully!")
+
+        except FileNotFoundError:
+            print("No books found.")
+
+    elif choice == "7":
+        return_id = input("Enter Book ID to return: ")
+
+        updated_rows = []
+        found = False
+
+        try:
+            with open("books.csv", "r") as file:
+                reader = csv.reader(file)
+
+                for row in reader:
+                    if row and row[0] == return_id:
+                        row = [row[0], row[1], row[2], "Available"]
+                        updated_rows.append(row)
+                        found = True
+                    else:
+                        updated_rows.append(row)
+
+            with open("books.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+
+            if found:
+                print("Book returned successfully!")
             else:
                 print("Book not found.")
 
         except FileNotFoundError:
             print("No books found.")
+
+    elif choice == "8":
+        print("Thank you!")
+        break
+
+    else:
+        print("Invalid choice. Try again.")
