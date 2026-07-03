@@ -1,6 +1,8 @@
-print("===================================")
+import csv
+
+print("================================")
 print("Library Management System")
-print("===================================")
+print("================================")
 
 while True:
     print("\nMenu")
@@ -11,10 +13,32 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        print("Add Book feature coming soon.")
+        book_id = input("Enter Book ID: ")
+        book_name = input("Enter Book Name: ")
+        author = input("Enter Author Name: ")
+
+        with open("books.csv", "a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([book_id, book_name, author])
+
+        print("Book added successfully!")
 
     elif choice == "2":
-        print("View Books feature coming soon.")
+        try:
+            with open("books.csv", "r") as file:
+                reader = csv.reader(file)
+
+                print("\nLibrary Books")
+                print("--------------------------")
+
+                for row in reader:
+                    print("Book ID:", row[0])
+                    print("Book Name:", row[1])
+                    print("Author:", row[2])
+                    print("--------------------------")
+
+        except FileNotFoundError:
+            print("No books found.")
 
     elif choice == "3":
         print("Thank you!")
