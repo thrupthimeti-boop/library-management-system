@@ -1,4 +1,4 @@
-import csv
+ import csv
 
 print("================================")
 print("Library Management System")
@@ -10,7 +10,8 @@ while True:
     print("2. View Books")
     print("3. Search Book")
     print("4. Update Book")
-    print("5. Exit")
+    print("5. Delete Book")
+    print("6. Exit")
 
     choice = input("Enter your choice: ")
 
@@ -96,6 +97,33 @@ while True:
             print("No books found.")
 
     elif choice == "5":
+        delete_id = input("Enter Book ID to delete: ")
+        updated_rows = []
+        found = False
+
+        try:
+            with open("books.csv", "r") as file:
+                reader = csv.reader(file)
+
+                for row in reader:
+                    if row and row[0] == delete_id:
+                        found = True
+                    else:
+                        updated_rows.append(row)
+
+            with open("books.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+
+            if found:
+                print("Book deleted successfully!")
+            else:
+                print("Book not found.")
+
+        except FileNotFoundError:
+            print("No books found.")
+
+    elif choice == "6":
         print("Thank you!")
         break
 
