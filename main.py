@@ -9,7 +9,8 @@ while True:
     print("1. Add Book")
     print("2. View Books")
     print("3. Search Book")
-    print("4. Exit")
+    print("4. Update Book")
+    print("5. Exit")
 
     choice = input("Enter your choice: ")
 
@@ -65,6 +66,36 @@ while True:
             print("No books found.")
 
     elif choice == "4":
+        update_id = input("Enter Book ID to update: ")
+        updated_rows = []
+        found = False
+
+        try:
+            with open("books.csv", "r") as file:
+                reader = csv.reader(file)
+
+                for row in reader:
+                    if row and row[0] == update_id:
+                        new_name = input("Enter New Book Name: ")
+                        new_author = input("Enter New Author Name: ")
+                        updated_rows.append([update_id, new_name, new_author])
+                        found = True
+                    else:
+                        updated_rows.append(row)
+
+            with open("books.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(updated_rows)
+
+            if found:
+                print("Book updated successfully!")
+            else:
+                print("Book not found.")
+
+        except FileNotFoundError:
+            print("No books found.")
+
+    elif choice == "5":
         print("Thank you!")
         break
 
